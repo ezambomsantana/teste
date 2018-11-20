@@ -1,0 +1,99 @@
+\chapter{Conclusions and Future Work}
+\label{cap:conclusoes}
+
+Simulators are important tools to develop and evaluate modifications in the city infrastructure and possible public policies. The Smart City community can have a great benefit using simulators, mainly to facilitate experiments and evaluation of city applications, and scientific hypothesis. However, there are many challenges to the effective simulators usage such as scalability, lack of appropriate models, and difficult to use state-of-the-art tools.
+
+This research aimed to provide tools to face some of the challenges of developing a city simulator able to model large-scale scenarios. The main result of this work is the development of InterSCSimulator, a open-source, scalable, Smart City simulator. This simulator is capable of simulating an entire metropolis such as S\~ao Paulo with more than 15 million travels. Moreover, the simulator was already used in many technical and scientific projects as showed in Chapter \ref{cap:uses}.
+
+\section{Contributions}
+
+This work had technical and scientific contributions to the fields of Smart Cities, Large-Scale Simulations, and Software Integration. In the following we summarize the main outcomes of this work:
+
+\subsection{Technical Contributions}
+
+\begin{description}
+
+\item[Smart City Simulator:] We developed the simulator which is available as an open source software to all the Smart City community. The software already implements many traffic models and is extensible to new city scenarios allowing city planning and test of scientific projects.
+
+\item[Large-Scale Experiments:] We conducted scalability experiments to evaluate the maximum load of the InterSCSimulator using the Google Compute Engine in the cloud. Our tests showed that the simulator is capable of running in large-scale machines with more than 64 CPUs and 300 GBs of memory.
+
+\item[Smart City Platform and Simulator Integration:] The InterSCity platform and the InterSCSimulator are already integrated. Thus, it is possible to develop and test new applications on the platform using the simulated data and also validate new simulations scenarios with the data stored in the platform.
+
+\end{description}
+
+\subsection{Scientific Contributions}
+
+\begin{description}
+
+\item[Smart City Simulator Scalability:] We demonstrated the scalability of the simulator through experiments that started with 10\% and finished with 100\% of the population of S\~ao Paulo simulated.
+
+\item[Experiments Using the Simulator:] We showed different works that used the simulation to evaluate their proposals such as the Digital Rails autonomous vehicles, the S\~ao Paulo bus movement model, and the scalability experiments of the InterSCity platform.
+ 
+\end{description}
+
+\subsection{Educational Contributions}
+
+\begin{description}
+
+\item[Courses: ] The simulator was used in a Smart City course to support the tests of a new bus traffic model in the city of S\~ao Paulo. The model is based on real data collected from the city buses.
+
+\item[Capstone Project: ] An undergraduate student used the simulator to develop a simulation of Digital Rails, a new transportation mode that uses autonomic vehicles and semaphore synchronization. The project extended the simulator to allow the simulation of this new transportation approach.
+
+\item[Master Thesis: ] InterSCSimulator supported the development of two master thesis. The first, allowing the realistic, large-scale experiments to analyze the scalability of InterSCity platform. The second, the simulator was used as study-case to an approach to integrate Smart Cities simulators and platforms to allow tests and experiments in Smart Cities platforms, services, and applications.
+
+\item[Educational Material:] The material produced from the bibliographic review of Smart Cities was used to at least three Smart Cities courses in universities in Brazil and in computer science conferences.
+
+\end{description}
+
+
+
+
+
+
+\section{Publications}
+\label{sec:publicacoes}
+
+Based on the research presented in this thesis, we published seveb scientific papers or book chapters. Three regarding the literature review, two about InterSCSimulator architecture, and two showing the use of the simulator. The complete list of publications are in the following:
+
+Santana, E.F.Z., Chaves, A.P., Gerosa, M.A., Kon, F. and Milojicic, D. Software platforms for smart cities: Concepts, requirements, challenges, and a unified reference architecture. ACM Computing Surveys (CSUR) 50.6 (2017): 78.
+
+Kon, F.; Santana, E. F. Z. Cidades Inteligentes: Tecnologias, Aplicações, Iniciativas e Desafios. In: José Carlos Maldonado; José Viterbo; Marcio Eduardo Delamaro; Sabrina Marczak. (Org.). Jornadas de Atualização em Informática. 1 ed.Porto Alegre: Sociedade Brasileira de Computação, 2016.
+
+Kon, F.; Santana, E. F. Z. Computação aplicada a Cidades Inteligentes: Como dados, serviços e aplicações podem melhorar a qualidade de vida nas cidades. In: Flávia Delicato; Paulo Pires. (Org.). Jornadas de Atualização em Informática. 1 ed. Porto Alegre: Sociedade Brasileira de Computação, 2017.
+
+Santana, E. F. Z., Bastista, D. M., Kon, F. and Milojicic, D. S. SCSimulator: An Open Source, Scalable Smart City Simulator. In Tools Session of the 34th Brazilian Symposium on Computer Networks (SBRC). Salvador, Brazil, 2016.
+
+Santana, E. F. Z.; Lago, N. ; KON, F. ; Milojicic, D. InterSCSimulator: Large-Scale Traffic Simulation in Smart Cities using Erlang. In 18th Workshop on Multi-agent-based Simulation (MABS), São Paulo, Brazil, 2017.
+
+Santana, E. F. Z., Kanashiro, L., Tomasiello, D., Kon, F., Giannotti, M. "Analyzing Urban Mobility Carbon Footprint with Large-scale, Agent-based Simulation." SMARTGREENS. 2018.
+
+Santana, E. F. Z., Kanashiro, L., Kon, F. Geração de Rastros de Mobilidade para Experimentos em Redes Veiculares. II Workshop de Computação Urbana (CoUrb). 2018.
+
+Besides, two other papers were published using the InterSCSimulator as support tool.
+
+
+\section{Future Work}
+
+There are several future work regarding the InterSCSimulator such as improvements in the simulator implementation including new features and changes in its architecture and the inclusion of new Smart Cities scenarios. Regarding the improvements in the simulator implementation:
+
+\begin{description}
+
+\item[Distributed Simulations:] The current version of InterSCSimulator does not allow distributed simulations, mainly because of the use of ETS tables that are not distributed across a Erlang network. Therefore, to distribute the InterSCSimulator it will be necessary to implement a synchronization service that updates the ETS table in all Erlang nodes that are executing the simulator.
+
+\item[Real-Time Visualization:] The tool that we are using to visualize the simulations only work with the entire log of simulation already generated. We plan to develop a tool that can get the data directly from the simulator and generate an animated visualization  of the simulation.
+
+\item[Simulation of Events:] We intend to add the occurrence of events in the city that can change the traffic behavior such as rain, accidents, and road closures.
+
+\item[Real-Time Integration with a Network Simulator:] 
+
+\end{description}
+
+Regarding the new Smart Cities scenarios:
+
+\begin{description}
+
+\item[Waste Management:] It is possible to simulate the waste trucks and the city infrastructure to the waste management system such as trash disposals and trash bins. With this scenario is possible to measure the efficiency of the system and test algorithms to create the routes to the trucks.
+
+\item[Health-Care:] The InterSCSimulator already allows the simulation of buildings that can be the origin or the destination of travels. Using this idea, it is possible to simulate hospitals that are the destination of people with health problems. Using this scenarios is possible to analyze the time that the city inhabitants are taking to go to a hospital and measure the necessity of medical units in different regions of the city.
+
+\end{description}

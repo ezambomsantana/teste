@@ -1,0 +1,122 @@
+\chapter{Related Work}
+\label{cap:relacionados}
+
+In our literature review and web searches, we found simulators of different city domains such as traffic, smart grids, and soil occupation. Some of them are extensible to simulate complex cities scenarios such as the effect of electric vehicles in smart grids, the use of public transportation in the urban mobility, and the influence of shared cars in the city traffic. This chapter presents simulators that implement at least one smart city domain. We defined the requirements for the development of InterSCSimulator based on the simulators described in this section.
+
+\section{Traffic Simulators}
+\label{sec:rel_transito}
+
+As the main implementation of the current version of InterSCSimulator is the traffic , we will first present the traffic simulators found in the literature. These simulators are divided into two types: the microscopic simulators that aim to minutely simulate the behavior of the drivers and the macroscopic simulators that can use mesoscopic or macroscopic models and intent to reproduce the entire mobility system of a large area. Typically, a microscopic simulator considers just a small number of blocks and intend to evaluate the impact of an intervention in the city infrastructure such as a new lane in a street or a new group of semaphores in a neighborhood.
+
+Differently, a macroscopic simulator examines a broader area and aim to study impacts of extensive changes in the city infrastructure such as a new subway line, a new bus corridor, or the effect on the mobility of the city with a new financial district in the city. We will detail three simulators that are more related to our work and then present a list of other projects.
+
+\subsection{MATSim}
+
+MATSim is an open source, agent-based, mesoscopic, traffic simulator \cite{horni2016multi}. In this simulator, each person is modeled as a software agent with individual settings, and the sum of all agents actions have representative demographics of a region \cite{balmer2008agent}. Each agent has a plan which are all the daily activities from the simulated person such as work, university, and leisure. Besides the agents' schedule, to create a simulator scenario in MATSim, it is also necessary a graph that represents the city road network. 
+
+After the creation of the scenario, the simulator executes all the displacements of the agents in the scheduled time using the city road network. The core of the simulator use only pedestrian and car models. However, several works are extending MATSim to the use of buses \cite{fourie2014reconstructing}, autonomous taxis \cite{bischoff2016simulation}, and shared vehicles \cite{balac2018modeling}. 
+
+MATSim uses a queue-based algorithm to simulate the movement and calculate the speed of the vehicles during the simulation. In this model, all the streets are queues in which the cars have to wait a determined time to go to the next street. The flow and storage of the links are limited. If both are free, the vehicles travel in the free-flow speed. Otherwise, their speed is calculated using a density formula. The results are saved in a text file with all the events occurred during a simulation. This file is used to statistical analyses or for the visualization of the simulation.
+
+A significant advantage of MATSim is the offer of several tools to facilitates the creation of simulation scenarios such as a parser of the OpenStreetMap format, a coordinate system converter, a map editor, and a visualization tool. 
+
+Regarding the scalability, MATSim is capable of simulating large areas such as cities and metropolitan areas. For example, Balmer et al. \cite{balmer2008agent} present a simulation with more than 200 thousand simultaneous actors in the region of Zurich and Kickhofer et al. \cite{kickhofer2016creating} present the development of the scenario of Santiago, Chile with a population of almost 50 thousand agents. However, due to it is not parallel and distributed architecture and the usage of the Java language, the MATSim is not capable of simulating an entire population of a giant city such as S\~ao Paulo.
+
+\subsection{SUMO}
+
+SUMO is a microscopic, open source traffic simulator developed by German Aerospace Center \cite{behrisch2011sumo}. This simulator uses a Car-Following-Model and a lane-changing model. The first simulates the speed of a car based on the vehicles that are in front of it and the former calculates the probability of a car to change its lane in the street. As MATSim, a digraph represents the city road network with the edges defining the stretches of the roads and the nodes creating the intersections.
+
+SUMO has many auxiliary tools to facilitate the development of traffic scenarios. For example, a network converter suited for reading data from the OpenStreetMap and from other simulators such as MATSim and VISSIM, a demand modeler capable of reading origin-destination data and create travels to simulate, and a dynamic router generator, responsible for creating routes in the city graph for the simulated trips. 
+
+Many projects, academic or commercial, use SUMO. For example, VEINS  \cite{riebl2015artery} combines SUMO and OMNET++, an open source network simulator, to simulate VANETs in different projects \cite{buse2018bridging,aslam2018flexible}. Other examples of the use of SUMO are to simulate smart traffic lights algorithms \cite{azevedo2016jade}, generate mobility traces \cite{codeca2017luxembourg,uppoor2014generation}, evaluate the infrastructure and the use of electric vehicles \cite{sagaama2018proposal}, and analyze the impact of autonomous vehicles \cite{tettamanti2018vehicle,garzon2018hybrid}.
+
+Due to it model, SUMO is not very scalable, because microscopic models are very CPU intensive and is not easy to parallelize and distribute. The bigger simulations we found using SUMO are the Luxembourg simulation with 138,361 vehicles during an entire day \cite{codeca2017luxembourg} and the Cologne  scenario with approximately 200 thousand vehicles during the peak hour in the city, from 6am to 8am \cite{uppoor2014generation}.
+
+\subsection{GPU Mesoscopic Traffic Simulation}
+
+Song et al. \cite{song2017gpusimulation} present a mesoscopic traffic simulator framework using GPUs (Graphical Processing Unit). This work aims to use the excellent processing power of GPUs to the fast execution of large-scale, traffic scenarios. The framework employs CPUs to create the agents travels and GPUs to execute the travels in the city graph. The simulator uses an asynchronous simulation step strategy which allows the execution of parallel algorithms.
+
+As MATSim, this simulator uses a queue-based algorithm with a speed-density relationship on the density of the link. We used this model in the InterSCSimulator traffic simulation. We describe it better in Section \ref{sub:modelo}. This simulator was tested using a real scenario of Singapore with a traffic network with 3179 nodes and 9419 links and 100 thousand agents in the peak-hour of the city (7:00 a.m.–8:00 a.m.).
+
+The simulator experiments showed a two-times improvement in the execution time of the simulators using the CUDA language compared to a reference implementation written in C++. However, the authors describe two possible problems: the communication of the CPU and GPU is a bottleneck to the simulator, and the limited memory available in the GPUs which limits the size of the city network and the number of simultaneous agents.
+
+\subsection{Other Simulators}
+
+\textbf{DEUS (Discrete-Event Universal Simulator)} is a discrete-event, general purpose simulator that was extended to simulate Vehicular Ad-Hoc Networks (VANET) \cite{picone2012simulating}.  DEUS is open-source and developed in Java. Its programming model is simple, containing two main classes: Node and Event. The Node class represents the possible agents of the simulation scenario and the class Event the possible events that occur in the simulation, always related to one or more node. The traffic scenario uses a mesoscopic traffic model that calculates the speed of the cars accordingly with the number of vehicles in each street. However, due to its architecture, which is not parallel and not distributed, DEUS cannot simulate an entire metropolitan region.
+
+\textbf{Siafu} is an open-source, agent-based urban simulator developed in Java \cite{nazario2014toward}. This simulator aims to simulate different scenarios in a city such as traffic and buildings. This simulator has a rich graphical interface that allows real-time visualizations and modification of the simulated scenario. Indeed, the simulator provides a tool to export all the results of the simulation to a CSV file. The data generated in the simulator is prepared to be analyzed by machine learning tools. In this simulator, the creation of the simulation scenario is manual. Therefore, this simulator is not suitable for large scenarios simulations.
+
+\textbf{Mezzo} is a mesoscopic simulation model suitable for the integration of meso-micro models \cite{burghout2006discrete}. The output of the model uses a format that facilitates the development of microscopic models based on the data of Mezzo. Besides the model, Burghout et al. \cite{burghout2006discrete}  present simulations using the real road network of Stockholm, Sweden, and travels based on an origin-destination survey. However, they do not discuss the scalability of the model, and we can not find details about the model implementation.
+
+Fernandez-Isabel e Fuentes-Fern\'andez \cite{fernandez2015model} propose the use of Model-Driven Engineering (MDE) to the development of traffic simulations. Following their proposal, the development of a traffic simulation has two phases. First, traffic engineers model the traffic components and define the input data of the simulation. Then, software developers implement the required tools to the definition and execution of the simulation. The objective of using MDE is to avoid misunderstanding among the multidisciplinary team necessary to create a traffic simulator. The paper also presents a study case of a simulation using a synthetic road network and travels. 
+
+\textbf{DTALite} \cite{zhou2014dtalite} is a mesoscopic traffic simulator that besides the density formula used to calculate the vehicles speed, uses a queue model to control the vehicle flow in the links of the city graph. This model verifies the flow of vehicles that are trying to enter in an edge in a time instant and limits this flow to a maximum input flow of each link of the graph. The simulator developers tested it with the road network of the city of Raleigh in the United States with 2,389 vertex and 20,259 links. An experiment presents a simulation with approximately 1 million travels between 6 am, and 10 am.
+
+PTV \footnote{PTV Group -- http://www.ptvgroup.com/en/} is a German company that develops many products to traffic planning and management. Among these products, there are two traffic simulators, Vissim and Visum, the first microscopic and the former mesoscopic. These simulators are used in many cities around the world, both by city managers and researchers \cite{buck2017calibrating,leyn2015calibrating}. The advantages of these simulators are the straightforward definition of simulation scenarios and the company support to their customers. However, the simulators are not open source, not extensible, not scalable to an entire metropolitan area, and have a high cost.
+
+The SimMobilityMT is a traffic simulator with three complementary models. The Pre-Day model defines the synthetic population that will be simulated and what are their activities during the simulation period. The Within-Day model simulates the travels of all agents created by the previous models. The traffic conditions can modify the routes of the agents during the simulation. The Supply model updates the data of the road network of the city during the simulation. The simulator was tested in a large scenario using the traffic network of Singapore with 340 thousand travels during the peak hour of the city, from 08:30 am until 09:30 am.
+
+None of the simulators cited above scale to an entire metropolitan area using a map with thousands of streets and millions of vehicles moving simultaneously in the city. All the open source simulators use Java and C++  programming languages which the development of parallel and distributed applications are not transparent. Just one simulator \cite{song2017gpusimulation} uses GPU which can leverage the use of parallel algorithms. Therefore, the use of language that simplifies the development of parallel and distributed applications can facilitate the implementation of a scalable Smart City simulator. The table \ref{table:comparacao_simuladores} presents a comparison of all the simulators presented in this section and InterSCSimulator.
+
+\begin{table}[!htb]
+\centering
+{%
+\begin{tabular}{|l|c|c|c|c|c|c|c|}
+\hline
+
+& \begin{sideways}Language \end{sideways} 
+& \begin{sideways}Model \end{sideways} 
+& \begin{sideways}Large-Scale \end{sideways} 
+& \begin{sideways}Usability \end{sideways} 
+& \begin{sideways}Parallel \end{sideways} 
+& \begin{sideways}Open-Source \hspace{1cm}\end{sideways} 
+\\
+\hline
+DEUS
+& Java & Meso & No & Yes & No & Yes\\
+SUMO
+& C++ & Micro & No & No & Yes & Yes \\
+Siafu
+& Java & Meso & No & Yes & No & Yes\\
+MATSim
+& Java & Meso & Yes & Yes & Yes  & Yes \\
+Mezzo
+& ? & Meso & No & No & No  & ? \\
+GPU Simulation
+& C++/CUDA & Meso & Yes & No & Yes  & Yes \\
+MDE Model
+& Java & Meso & Yes & No & No  & ? \\
+DTALite
+& C++ & Meso & Yes & No & Yes  & Yes \\
+Vissim
+&  & Micro & No & Yes & No & No \\
+Visum
+&  & Macro & Yes & Yes & No  & No \\
+SimMobilityMT
+& C++ & Meso & Yes & No & Yes & Yes \\
+InterSCSimulator
+& Erlang & Meso & Yes & Yes & Yes & Yes \\
+\hline
+\end{tabular}}
+\caption{Comparison among the analyzed simulators and the InterSCSimulator\label{table:comparacao_simuladores}}
+\end{table}%
+
+\section{Other Domain Simulators}
+\label{ref:outros_dominios}
+
+The work presented in this thesis focus on the simulation of traffic scenarios. However, the InterSCSimulator aims to simulate comprehensive Smart Cities scenarios. For example, the simulator already simulates buildings and sensors. Therefore, we analyzed simulators related to other Smart Cities scenarios such as Smart Grids, Sensors Networks, and soil usage. The analyzed simulators are in the following:
+
+Ursachi and Bordeassa \cite{ursachi2014smart} present a Smart Grid simulator. A Smart Grid is an intelligent electricity system, and the simulator has the objective of finding an optimized electricity distribution model. Their algorithm combines the cost of producing energy from different sources such as solar, wind, and hydroelectric, the distance from the customers to the energy producers, and the climatic conditions. The simulator always tries to use the electricity source with the minor cost and environmental impact.
+
+Karnouskos and de Holanda \cite{karnouskos2009simulation}  present an agent-based Smart Grid simulator. This simulator aims to create the dynamic environment of a Smart City. The simulator provides many entities which consume or produce energy such as power plants, electric vehicles, houses with different energy consumption, and public lights. The simulation input is the description of the simulated entities and the simulation time and the output is a file with all the energy generation and consumption events which allow the creation of charts and animations of the simulation results. The scalability evaluation shows that the simulator supports more than 5000 objects and 70 million events.
+
+UrbanSim \cite{waddell2003microsimulation} is a simulator with the objective of modeling the impact of changes in the use of the soil of a city in many areas such as mobility and real estate. The system has a set of models and agents that represent the main objects an urban environment such as houses, buildings, and places with great people concentration. Also, it is possible to simulate events that change the average price of buildings in a region such as the constructions of a new park or a new shopping center. The impacts in traffic are caused by changing the number of people moving in the city and the origin-destination of a set of actors. However, UrbamSim does not simulate the agents individually, it calculates through models the modifications and generates tables with the data about the city.
+
+A sensor network is an essential component of Smart Cities. There are many simulators capable of simulating a city sensor network. Among these simulators, there are ones that reproduce the low level of a computer network such as SENSE \cite{chen2005sense} and ATEMU \cite{polley2004atemu}, what is not the focus of this thesis. Otherwise, there is the simulators that model applications of sensor networks or the data generated by the sensors such as the CupCarbon \cite{mehdi2014cupcarbon} and SenSE \cite{zyrianoff2017sense}, this type of the simulator has the same objective of this thesis because many Smart Cities scenarios will depend on a city sensor network. For example, a smart parking scenario can have many sensors to indicate if a parking spot is free or occupied, and a city sensing scenarios can collect data from an extensive network to analyze the city temperature, pollution, and noise.
+
+\section{Conclusions}
+\label{sec:rev_conclusoes}
+
+This chapter presented the most know traffic and other Smart City domains simulators. Our literature review showed that there are many projects to simulate the road network of a city and the trips of the citizens during a day in the city. However, most of them have significant limitations such as the scalability, the simulation of only individual cars and not of different mobility modes, and the difficult to adapt the simulator for new traffic models. The review also gathered the main requirements for the implementation of a new smart city simulator.
+
+The next chapter presents the implementation of InterSCSimulator, a scalable, open-source Smart City simulator. To develop our simulator, we considered the strength of all the studied simulator such as providing tools to create simulation scenarios, the use of open traffic models, and the integration of different models. We also examined the implemented architecture of the simulators and decided to use the Erlang language, ready for the development of large-scale applications. Finally, we also tried to reuse many tools from other simulators such as the visualization tool from MATSim and the network generator from SUMO.
